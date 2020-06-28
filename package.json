@@ -24,6 +24,7 @@
   "homepage": "https://github.com/roland-kister/janitor#readme",
   "dependencies": {
     "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
     "js-yaml": "^3.14.0"
   },
   "devDependencies": {

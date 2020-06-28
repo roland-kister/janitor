@@ -1,8 +1,10 @@
 import Discord from 'discord.js';
+import dotenv from 'dotenv';
 import path from 'path';
 import { getCommdansCollection, loadConfig } from './init.js';
 
-const CONFIG_FILE_PATH = './config/config.yaml';
+dotenv.config();
+
 const COMMANDS_DIR = path.join(path.resolve(), './lib/commands/');
 
 const client = new Discord.Client();
