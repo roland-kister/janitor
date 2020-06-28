@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "Discord bot for deleting messages",
   "engines": {
-    "node": "14.x"
+    "node": "14.x",
+    "npm": "*"
   },
   "main": "./lib/index.js",
   "type": "module",
   "scripts": {
     "build": "npx tsc",
-    "start": "node ./lib/index.js",
-    "build-and-run": "rm -r ./lib/* && npx tsc && node ./lib/index.js"
+    "start": "rm -r ./lib/* && npx tsc && node ./lib/index.js"
   },
   "repository": {
     "type": "git",
