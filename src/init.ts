@@ -5,7 +5,6 @@ import { Command } from './types/Command.js';
 import { Config } from './types/Config.js';
 
 export const loadConfig = (): Config | null => {
-  console.log(process.env);
   if (process.env.prefix && process.env.token) {
     return {
       prefix: process.env.prefix,

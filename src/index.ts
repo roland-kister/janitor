@@ -31,10 +31,10 @@ client.once('ready', () => {
 
 client.on('message', async (message) => {
   const match = prefixRegex.exec(message.content);
-  console.log(message.content, match, prefixRegex);
+
   if (match && !message.author.bot && message.guild != null) {
     const args = message.content.replace(prefixRegex, '').split(/ +/);
-    console.log(args);
+
     if (args.length == 0) {
       message.reply('No args provided');
     }
