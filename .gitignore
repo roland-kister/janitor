@@ -108,3 +108,6 @@ config/*.yaml
 
 # Compiled JS files
 lib/
+
+# VSCode worskpace settings
+.vscode/

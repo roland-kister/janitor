@@ -11,6 +11,8 @@ const commands = getCommdansCollection();
 
 const config = loadConfig(CONFIG_FILE_PATH);
 
+const prefixRegex = new RegExp(`^${config?.prefix} *(\\w+) *`);
+
 if (!config) {
   console.log(`Config file couldn't be loaded`);
 
@@ -19,21 +21,23 @@ if (!config) {
 
 client.once('ready', () => {
   console.log('Ready!');
+
+  if (client.user) {
+    client.user.setActivity('help', { type: 'LISTENING' });
+  }
 });
 
 client.on('message', async (message) => {
-  if (
-    message.content.startsWith(config.prefix) &&
-    !message.author.bot &&
-    message.guild != null
-  ) {
-    const args = message.content.slice(config.prefix.length).split(/ +/);
-
+  const match = prefixRegex.exec(message.content);
+  console.log(message.content, match, prefixRegex);
+  if (match && !message.author.bot && message.guild != null) {
+    const args = message.content.replace(prefixRegex, '').split(/ +/);
+    console.log(args);
     if (args.length == 0) {
       message.reply('No args provided');
     }
 
-    const commandName = (args.shift() as string).toLowerCase();
+    const commandName = match[1];
 
     const command = commands.get(commandName);
 
@@ -44,7 +48,7 @@ client.on('message', async (message) => {
         setTimeout(() => {
           reply.delete();
           message.delete();
-        }, 5000);
+        }, 60000);
       });
     }
   }
