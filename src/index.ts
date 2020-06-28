@@ -11,7 +11,7 @@ const client = new Discord.Client();
 
 const commands = getCommdansCollection();
 
-const config = loadConfig(CONFIG_FILE_PATH);
+const config = loadConfig();
 
 const prefixRegex = new RegExp(`^${config?.prefix} *(\\w+) *`);
 

@@ -4,7 +4,7 @@ import { help } from './commands/help.js';
 import { Command } from './types/Command.js';
 import { Config } from './types/Config.js';
 
-export const loadConfig = (configFilePath: string): Config | null => {
+export const loadConfig = (): Config | null => {
   console.log(process.env);
   if (process.env.prefix && process.env.token) {
     return {
