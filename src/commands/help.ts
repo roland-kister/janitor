@@ -6,16 +6,18 @@ const execute = async (message: Message, args: string[]): Promise<Message> => {
   if (args.length == 0) {
     const commands = getCommdansCollection();
 
-    let helpMessage: string = '';
+    let helpMessage: string = '```js\n';
 
     commands.each((command) => {
       helpMessage = helpMessage.concat(
-        '\n',
+        "\n'",
         command.name,
-        ' - ',
+        "' - ",
         command.shortDescription,
       );
     });
+
+    helpMessage = helpMessage.concat('\n```');
 
     return message.channel.send(helpMessage);
   } else if (args.length == 1) {
@@ -38,9 +40,10 @@ const execute = async (message: Message, args: string[]): Promise<Message> => {
 export const help: Command = {
   name: 'help',
   aliases: 'h',
-  shortDescription: 'Vypíše všetky príkazy a ich použitie, napr. `help del`',
-  description: `Použitie príkazy príkazu: \`help ([názov príkazu])\`
-Ak nie je definovaný názov príkazu, vypíšu sa všetky príkazy a ich použitie
-Ak je definovaný názov príkazu, vypíše sa jeho podrobné použitie`,
+  shortDescription: "pomoc ku konkrétnemu príkazu, napr. 'help del'",
+  description: `\`\`\`js
+Použitie príkazu: 'help [názov príkazu]'
+Ak sa vynechá 'názov príkazu', vypíšu sa všetky príkazy
+\`\`\``,
   execute,
 };

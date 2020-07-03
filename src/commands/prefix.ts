@@ -33,7 +33,10 @@ const execute = async (message: Message, args: string[]): Promise<Message> => {
 export const setPrefix: Command = {
   name: 'prefix',
   aliases: 'p',
-  shortDescription: 'Nastaví prefix bota, napr. `set-prefix -`',
-  description: `Nastaví prefix bota pre server, napr. \`set-prex -\`. Prefix môže byť jedno slovo alebo emote.`,
+  shortDescription: "Nastaví prefix bota, napr. 'prefix +'",
+  description: `\`\`\`js
+Nastaví prefix bota pre server, napr. 'prefix +'
+Prefix môže byť znak, jedno slovo alebo emote.
+\`\`\``,
   execute,
 };

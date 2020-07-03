@@ -225,14 +225,17 @@ export const del: Command = {
   name: 'del',
   aliases: 'd',
   shortDescription: 'Vymaže správy podľa poskytnutých argumentov',
-  description: `Vymazanie správy na základe podmienky
-Typy vymazania:
-- \`bot\`-> \`del bot @Bot1\`
-- \`starts\` -> \`del starts -play\` (všetky správy začínajúce daným textom)
-- \`regex\` -> \`del regex ^-\\w+\`
+  description: `\`\`\`js
+Vymazanie správy na základe podmienky
+ Typy vymazania:
+- 'bot' -> 'del bot @Bot1'
+- 'starts' -> 'del starts -play' (všetky správy začínajúce daným textom)
+- 'regex' -> 'del regex ^-\\w+'
+
 Logické operátory:
-Použitie \`del bot @Bot1 or starts -play\`
-- \`and\` (výraz napravo a aj naľavo musí byť pravdivý na vymazanie)
-- \`or\` (výraz napravo alebo naľavo musí byť pravdivý na vymazanie)`,
+ Použitie 'del bot @Bot1 or starts -play'
+- 'and' -> výraz napravo A AJ naľavo musí byť pravdivý na vymazanie
+- 'or' -> výraz napravo ALEBO naľavo musí byť pravdivý na vymazanie
+\`\`\``,
   execute,
 };
