@@ -39,7 +39,7 @@ const execute = async (message: Message, args: string[]): Promise<Message> => {
 
 export const help: Command = {
   name: 'help',
-  aliases: 'h',
+  aliases: ['h'],
   shortDescription: "pomoc ku konkrétnemu príkazu, napr. 'help del'",
   description: `\`\`\`js
 Použitie príkazu: 'help [názov príkazu]'

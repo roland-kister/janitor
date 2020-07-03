@@ -56,6 +56,10 @@ export class Database implements DatabaseAdapter {
     channelId: string,
     defaultDelete: string,
   ): Promise<void> {
+    await this.pool.query('DELETE FROM default_delete WHERE channel_id = $1', [
+      channelId,
+    ]);
+
     await this.pool.query(
       'INSERT INTO default_delete (channel_id, command) VALUES($1, $2)',
       [channelId, defaultDelete],
@@ -74,6 +78,6 @@ export class Database implements DatabaseAdapter {
       return undefined;
     }
 
-    return response.rows[0].prefix;
+    return response.rows[0].command.trim();
   }
 }

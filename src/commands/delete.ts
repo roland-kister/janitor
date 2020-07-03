@@ -1,4 +1,5 @@
 import { Collection, Message, Snowflake, TextChannel } from 'discord.js';
+import { Database } from '../services/Database.js';
 import { Command } from '../types/Command.js';
 import { CommandToken, Token } from '../types/DelToken.js';
 import { TokenError } from '../types/DelTokenError.js';
@@ -7,6 +8,22 @@ import { convertStringToEnum } from '../util.js';
 
 const execute = async (message: Message, args: string[]): Promise<Message> => {
   try {
+    try {
+      if (args.length == 0) {
+        const defaultCommand = await Database.getDatabaseAdapter().getDefaultDeleteForChannel(
+          message.channel.id,
+        );
+
+        if (defaultCommand) {
+          args = defaultCommand.split(' ');
+        }
+      }
+    } catch (e) {
+      return message.channel.send(
+        'Neznáma chyba, za ktorú môže môj programátor',
+      );
+    }
+
     const rootToken = parseToken(args);
 
     const count = await deleteMessages(
@@ -75,7 +92,7 @@ const deleteMessages = async (channel: TextChannel, rootToken: Token) => {
   return count;
 };
 
-const parseToken = (args: string[]): Token => {
+export const parseToken = (args: string[]): Token => {
   const commandType = getCommandType(args.shift());
 
   const arg = getArg(args.shift(), commandType);
@@ -223,7 +240,7 @@ const getLogicalOperatorExecute = (
 
 export const del: Command = {
   name: 'del',
-  aliases: 'd',
+  aliases: ['d'],
   shortDescription: 'Vymaže správy podľa poskytnutých argumentov',
   description: `\`\`\`js
 Vymazanie správy na základe podmienky

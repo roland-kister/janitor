@@ -30,9 +30,9 @@ const execute = async (message: Message, args: string[]): Promise<Message> => {
   return message.channel.send(`Prefix úspešne nastavený na ${prefix}`);
 };
 
-export const setPrefix: Command = {
+export const prefix: Command = {
   name: 'prefix',
-  aliases: 'p',
+  aliases: ['p'],
   shortDescription: "Nastaví prefix bota, napr. 'prefix +'",
   description: `\`\`\`js
 Nastaví prefix bota pre server, napr. 'prefix +'
