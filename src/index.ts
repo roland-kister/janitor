@@ -1,27 +1,23 @@
 import Discord from 'discord.js';
 import dotenv from 'dotenv';
-import path from 'path';
-import { getCommdansCollection, loadConfig } from './init.js';
+import { getCommdansCollection, isValidConfig } from './init.js';
+import { Database } from './services/Database.js';
 
 dotenv.config();
 
-const COMMANDS_DIR = path.join(path.resolve(), './lib/commands/');
+if (!isValidConfig()) {
+  console.log('Invalid config');
+
+  process.exit(1);
+}
 
 const client = new Discord.Client();
 
 const commands = getCommdansCollection();
 
-const config = loadConfig();
+const databaseAdapter = Database.getDatabaseAdapter();
 
-const prefixRegex = new RegExp(`^${config?.prefix} *(\\w+) *`);
-
-if (!config) {
-  console.log(`Config file couldn't be loaded`);
-
-  process.exit(1);
-}
-
-client.once('ready', () => {
+client.once('ready', (): void => {
   console.log('Ready!');
 
   if (client.user) {
@@ -29,31 +25,59 @@ client.once('ready', () => {
   }
 });
 
-client.on('message', async (message) => {
-  const match = prefixRegex.exec(message.content);
-
-  if (match && !message.author.bot && message.guild != null) {
-    const args = message.content.replace(prefixRegex, '').split(/ +/);
-
-    if (args.length == 0) {
-      message.reply('No args provided');
+client.on(
+  'message',
+  async (message): Promise<void> => {
+    if (!message.guild || message.author.bot) {
+      return;
     }
 
-    const commandName = match[1];
+    let prefix: string | undefined = undefined;
 
-    const command = commands.get(commandName);
+    try {
+      prefix = await databaseAdapter.getPrefixForGuild(message.guild.id);
+    } catch (e) {
+      console.error(e);
 
-    if (!command) {
-      message.channel.send('Príkaz nenájdený');
+      message.channel.send('Neznáma chyba, za ktorú môže môj programátor');
+
+      return;
+    }
+
+    if (prefix) {
+      prefix = `(?:${prefix}|${process.env.prefix})`;
     } else {
-      command.execute(message, args).then((reply) => {
-        setTimeout(() => {
-          reply.delete();
-          message.delete();
-        }, 60000);
-      });
+      prefix = process.env.prefix;
     }
-  }
-});
 
-client.login(config?.token);
+    const prefixRegex = new RegExp(`^${prefix} *(\\w+) *`);
+
+    const match = prefixRegex.exec(message.content);
+
+    if (match) {
+      const args = message.content
+        .replace(prefixRegex, '')
+        .split(/ +/)
+        .filter((arg) => arg.length > 0);
+
+      const commandName = match[1];
+
+      const command = commands.get(commandName);
+
+      if (!command) {
+        return;
+      } else {
+        command.execute(message, args).then((reply) => {
+          setTimeout(() => {
+            try {
+              reply.delete();
+              message.delete();
+            } catch (e) {}
+          }, 60000);
+        });
+      }
+    }
+  },
+);
+
+client.login(process.env.token);

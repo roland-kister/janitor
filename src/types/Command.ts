@@ -1,9 +1,9 @@
-import Discord from 'discord.js';
+import { Message } from 'discord.js';
 
 export type Command = {
   name: string;
   aliases?: string;
   shortDescription: string;
   description: string;
-  execute(message: Discord.Message, args: string[]): Promise<Discord.Message>;
+  execute(message: Message, args: string[]): Promise<Message>;
 };

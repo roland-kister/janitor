@@ -8,3 +8,7 @@ export const convertStringToEnum = <T>(
 
   return keyAndValue ? keyAndValue[1] : undefined;
 };
+
+export const escapeRegExp = (string: string): string => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};

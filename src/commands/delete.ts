@@ -1,19 +1,16 @@
-import Discord from 'discord.js';
+import { Collection, Message, Snowflake, TextChannel } from 'discord.js';
 import { Command } from '../types/Command.js';
 import { CommandToken, Token } from '../types/DelToken.js';
 import { TokenError } from '../types/DelTokenError.js';
 import { CommandType, LogicalOperatorType } from '../types/DelTokenType.js';
 import { convertStringToEnum } from '../util.js';
 
-const execute = async (
-  message: Discord.Message,
-  args: string[],
-): Promise<Discord.Message> => {
+const execute = async (message: Message, args: string[]): Promise<Message> => {
   try {
     const rootToken = parseToken(args);
 
     const count = await deleteMessages(
-      message.channel as Discord.TextChannel,
+      message.channel as TextChannel,
       rootToken,
     );
 
@@ -36,10 +33,7 @@ const execute = async (
   }
 };
 
-const deleteMessages = async (
-  channel: Discord.TextChannel,
-  rootToken: Token,
-) => {
+const deleteMessages = async (channel: TextChannel, rootToken: Token) => {
   const limitDate = Date.now() - 1000000000;
 
   let count: number = 0;
@@ -47,9 +41,9 @@ const deleteMessages = async (
   let lastId: string | undefined = undefined;
 
   while (1) {
-    const messages: Discord.Collection<
-      Discord.Snowflake,
-      Discord.Message
+    const messages: Collection<
+      Snowflake,
+      Message
     > = await channel.messages.fetch({ limit: 100, before: lastId }, false);
 
     let messageIds: string[] = [];
@@ -190,17 +184,17 @@ const getLogicalOperatorType = (arg: string): LogicalOperatorType => {
 const getCommandExecute = (
   type: CommandType,
   arg: string | RegExp,
-): ((message: Discord.Message) => boolean) => {
+): ((message: Message) => boolean) => {
   switch (type) {
     case CommandType.BOT:
-      return (message: Discord.Message): boolean => message.author.id === arg;
+      return (message: Message): boolean => message.author.id === arg;
 
     case CommandType.REGEX:
-      return (message: Discord.Message): boolean =>
+      return (message: Message): boolean =>
         (arg as RegExp).test(message.content);
 
     case CommandType.STARTS:
-      return (message: Discord.Message): boolean =>
+      return (message: Message): boolean =>
         message.content.startsWith(arg as string);
   }
 };
@@ -215,14 +209,14 @@ const getCommandExecute = (
 const getLogicalOperatorExecute = (
   type: LogicalOperatorType,
   args: [CommandToken, Token],
-): ((message: Discord.Message) => boolean) => {
+): ((message: Message) => boolean) => {
   switch (type) {
     case LogicalOperatorType.AND:
-      return (message: Discord.Message): boolean =>
+      return (message: Message): boolean =>
         args[0].execute(message) && args[1].execute(message);
 
     case LogicalOperatorType.OR:
-      return (message: Discord.Message): boolean =>
+      return (message: Message): boolean =>
         args[0].execute(message) || args[1].execute(message);
   }
 };
@@ -231,13 +225,14 @@ export const del: Command = {
   name: 'del',
   aliases: 'd',
   shortDescription: 'Vymaže správy podľa poskytnutých argumentov',
-  description: `Syntax príkazu: del [typ vymazania] [argument typu] ([logický operátor] [typ vymazania] [argument typu] ...)
+  description: `Vymazanie správy na základe podmienky
 Typy vymazania:
-- bot (argument je označenie bota, napr. @Bot1)
-- starts (argument je nejaký reťazec, napr. -play)
-- regex (argument je nejaký regulárny výraz, napr. ^-\\w+)
+- \`bot\`-> \`del bot @Bot1\`
+- \`starts\` -> \`del starts -play\` (všetky správy začínajúce daným textom)
+- \`regex\` -> \`del regex ^-\\w+\`
 Logické operátory:
-- and (výraz napravo a aj naľavo musí byť pravdivý na vymazanie)
-- or (výraz napravo alebo naľavo musí byť pravdivý na vymazanie)`,
+Použitie \`del bot @Bot1 or starts -play\`
+- \`and\` (výraz napravo a aj naľavo musí byť pravdivý na vymazanie)
+- \`or\` (výraz napravo alebo naľavo musí byť pravdivý na vymazanie)`,
   execute,
 };

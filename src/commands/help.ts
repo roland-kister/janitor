@@ -1,11 +1,8 @@
-import Discord from 'discord.js';
+import { Message } from 'discord.js';
 import { getCommdansCollection } from '../init.js';
 import { Command } from '../types/Command.js';
 
-const execute = async (
-  message: Discord.Message,
-  args: string[],
-): Promise<Discord.Message> => {
+const execute = async (message: Message, args: string[]): Promise<Message> => {
   if (args.length == 0) {
     const commands = getCommdansCollection();
 
@@ -41,8 +38,8 @@ const execute = async (
 export const help: Command = {
   name: 'help',
   aliases: 'h',
-  shortDescription: 'Vypíše všetky príkazy a ich použitie, napr. help del',
-  description: `Syntax príkazu: help ([názov príkazu])
+  shortDescription: 'Vypíše všetky príkazy a ich použitie, napr. `help del`',
+  description: `Použitie príkazy príkazu: \`help ([názov príkazu])\`
 Ak nie je definovaný názov príkazu, vypíšu sa všetky príkazy a ich použitie
 Ak je definovaný názov príkazu, vypíše sa jeho podrobné použitie`,
   execute,

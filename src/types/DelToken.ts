@@ -1,10 +1,10 @@
-import Discord from 'discord.js';
+import { Message } from 'discord.js';
 import { CommandType, LogicalOperatorType, TokenType } from './DelTokenType';
 
 export interface Token {
   type: TokenType;
   args: CommandTokenArgs | LogicOperatorTokenArgs;
-  execute(message: Discord.Message): boolean;
+  execute(message: Message): boolean;
 }
 
 export type CommandTokenArgs = string | RegExp;
