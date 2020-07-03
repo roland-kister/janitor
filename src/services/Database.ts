@@ -16,11 +16,15 @@ export class Database implements DatabaseAdapter {
 
   private constructor() {
     this.pool = new pg.Pool({
-      user: process.env.db_user,
-      password: process.env.db_password,
-      database: process.env.db_name,
-      host: process.env.db_host,
-      port: parseInt(process.env.db_port as string, 10),
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+      // user: process.env.db_user,
+      // password: process.env.db_password,
+      // database: process.env.db_name,
+      // host: process.env.db_host,
+      // port: parseInt(process.env.db_port as string, 10),
     });
   }
 

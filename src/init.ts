@@ -5,15 +5,8 @@ import { setPrefix } from './commands/prefix.js';
 import { Command } from './types/Command.js';
 
 export const isValidConfig = (): boolean => {
-  if (
-    !process.env.prefix ||
-    !process.env.token ||
-    !process.env.db_user ||
-    !process.env.db_password ||
-    !process.env.db_name ||
-    !process.env.db_port ||
-    !process.env.db_host
-  ) {
+  console.log(process.env.DATABASE_URL);
+  if (!process.env.TOKEN || !process.env.PREFIX || !process.env.DATABASE_URL) {
     return false;
   }
 

@@ -45,9 +45,9 @@ client.on(
     }
 
     if (prefix) {
-      prefix = `(?:${prefix}|${process.env.prefix})`;
+      prefix = `(?:${prefix}|${process.env.PREFIX})`;
     } else {
-      prefix = process.env.prefix;
+      prefix = process.env.PREFIX;
     }
 
     const prefixRegex = new RegExp(`^${prefix} *(\\w+) *`);
@@ -80,4 +80,4 @@ client.on(
   },
 );
 
-client.login(process.env.token);
+client.login(process.env.TOKEN);
