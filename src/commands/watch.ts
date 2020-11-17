@@ -21,10 +21,8 @@ const execute = async (
     return message.channel.send(e.message);
   }
 
-  const databaseAdapter = Database.getDatabaseAdapter();
-
   try {
-    await databaseAdapter.setDefaultDeleteForChannel(
+    await Database.getDatabaseAdapter().setWatchDeleteForChannel(
       message.channel.id,
       command,
     );
@@ -32,22 +30,22 @@ const execute = async (
     console.error(e);
 
     return message.channel.send(
-      "Chyba pri nastavovaní predvoleného 'del' príkazu, za ktorú môže môj programátor",
+      'Chyba pri nastavovaní automatického vymazávania, za ktorú môže môj programátor',
     );
   }
 
   return message.channel.send(
-    `Predvolený \'del\' príkaz nastavený na '${command}'`,
+    `Automatické vymazávanie nastavené na podmienku '${command}'`,
   );
 };
 
-export const register: Command = {
-  name: 'register',
-  aliases: ['r'],
-  shortDescription: "Zaregistruje predvolenú podmienku pre 'del'",
+export const watch: Command = {
+  name: 'watch',
+  aliases: ['w'],
+  shortDescription: 'Zaregistruje podmienku pre automatické vymazávanie',
   description: `\`\`\`js
-Použitie príkazu: 'register [del podmienka]'
-Zaregistruje predvolenú podmienku pre 'del' príkaz pre kanál. Následne je možné používať 'del' bez parametrov.
+Použitie príkazu: 'watch [del podmienka]'
+Zaregistruje predvolenú podmienku, ktorá bude overovaná na každej správe v nastavenom kanáli. Ak je podmienka splnená, po 30 sekundách bude správa vymazaná.
 Pre viac informácií o 'del podmienka' použi príkaz 'help del'
 \`\`\``,
   execute,

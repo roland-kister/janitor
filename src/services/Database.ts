@@ -80,4 +80,45 @@ export class Database implements DatabaseAdapter {
 
     return response.rows[0].command.trim();
   }
+
+  async unsetDefaultDeleteForChannel(channelId: string): Promise<void> {
+    await this.pool.query('DELETE FROM default_delete WHERE channel_id = $1', [
+      channelId,
+    ]);
+  }
+
+  async setWatchDeleteForChannel(
+    channelId: string,
+    watchDelete: string,
+  ): Promise<void> {
+    await this.pool.query('DELETE FROM watch_delete WHERE channel_id = $1', [
+      channelId,
+    ]);
+
+    await this.pool.query(
+      'INSERT INTO watch_delete (channel_id, command) VALUES($1, $2)',
+      [channelId, watchDelete],
+    );
+  }
+
+  async getWatchDeleteForChannel(
+    channelId: string,
+  ): Promise<string | undefined> {
+    const response = await this.pool.query(
+      'SELECT command FROM watch_delete WHERE channel_id = $1',
+      [channelId],
+    );
+
+    if (!response.rows[0]) {
+      return undefined;
+    }
+
+    return response.rows[0].command.trim();
+  }
+
+  async unsetWatchDeleteForChannel(channelId: string): Promise<void> {
+    await this.pool.query('DELETE FROM watch_delete WHERE channel_id = $1', [
+      channelId,
+    ]);
+  }
 }

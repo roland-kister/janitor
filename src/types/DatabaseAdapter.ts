@@ -1,17 +1,22 @@
 /*
 DB structure:
-CREATE TABLE prefixes (
-  guild_id CHAR(19) NOT NULL,
-  prefix CHAR(64) NOT NULL
+drop table if exists prefixes;
+create table prefixes (
+  guild_id char(19) not null primary key,
+  prefix char(64) not null
 );
 
-CREATE TABLE default_delete (
-  channel_id CHAR(19) NOT NULL,
-  command CHAR(256) NOT NULL
+drop table if exists default_delete;
+create table default_delete (
+  channel_id char(19) not null primary key,
+  command char(256) not null
 );
 
-CREATE INDEX prefix_guild_id_idx ON prefixes (guild_id);
-CREATE INDEX default_delete_channel_id_idx ON default_delete (channel_id);
+drop table if exists watch_delete;
+create table watch_delete (
+  channel_id char(19) not null primary key,
+  command char(256) not null
+);
 */
 
 export interface DatabaseAdapter {
@@ -22,4 +27,11 @@ export interface DatabaseAdapter {
     defaultDelete: string,
   ): Promise<void>;
   getDefaultDeleteForChannel(channelId: string): Promise<string | undefined>;
+  unsetDefaultDeleteForChannel(channelId: string): Promise<void>;
+  setWatchDeleteForChannel(
+    channelId: string,
+    watchDelete: string,
+  ): Promise<void>;
+  getWatchDeleteForChannel(channelId: string): Promise<string | undefined>;
+  unsetWatchDeleteForChannel(channelId: string): Promise<void>;
 }

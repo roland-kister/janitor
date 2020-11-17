@@ -40,7 +40,7 @@ const execute = async (message: Message, args: string[]): Promise<Message> => {
 export const help: Command = {
   name: 'help',
   aliases: ['h'],
-  shortDescription: "pomoc ku konkrétnemu príkazu, napr. 'help del'",
+  shortDescription: "Pomoc ku konkrétnemu príkazu, napr. 'help del'",
   description: `\`\`\`js
 Použitie príkazu: 'help [názov príkazu]'
 Ak sa vynechá 'názov príkazu', vypíšu sa všetky príkazy

@@ -57,7 +57,9 @@ const deleteMessages = async (channel: TextChannel, rootToken: Token) => {
 
   let lastId: string | undefined = undefined;
 
-  while (1) {
+  let finished: boolean = false;
+
+  while (!finished) {
     const messages: Collection<
       Snowflake,
       Message
@@ -79,7 +81,7 @@ const deleteMessages = async (channel: TextChannel, rootToken: Token) => {
         return false;
       })
     ) {
-      break;
+      finished = true;
     }
 
     count += messageIds.length;
